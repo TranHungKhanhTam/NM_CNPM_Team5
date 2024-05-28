@@ -1,0 +1,197 @@
+body{
+  color: black;
+}
+a{
+  font-size: 15px;
+}
+:root {
+  --bg--color: white;
+  --main--color: #518111;
+  --body--snake: #4c72ee;
+}
+
+.game {
+  position: relative;
+  width: 1071px;
+  padding: 0 14px;
+  background: var(--bg--color);
+  flex: 3;
+}
+
+
+.cell {
+  height: 28px;
+}
+
+
+.gameover, .win {
+  position: absolute;
+  top: 206px;
+  z-index: 1;
+  font-weight: 500;
+  font-size: 100px;
+  color: var(--main--color);
+  visibility: hidden;
+  font-style: oblique;
+}
+
+.welcome {
+  position: absolute;
+  top: 120px;
+  left: 200px;
+  z-index: 1;
+  font-weight: 900;
+  font-size: 140px;
+  color: var(--main--color);
+  font-style: oblique;
+}
+
+.nav {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex: 1;
+
+}
+
+#new, #play {
+  padding: 15px 20px;
+  text-decoration: none;
+  font-size: large;
+  background: var(--bg--color);
+  color: var(--main--color);
+  border-radius: 10px;
+}
+
+#level {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  width: 115px;
+  height: 57px;
+  background: var(--bg--color);
+  font-size: large;
+  color: var(--main--color);
+  border-radius: 10px;
+}
+
+.alert-danger {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  left: 0;
+  top: 0;
+}
+
+.boom {
+  background-image: url('../images/boom.png');
+  background-size: 38px 28px;
+  width: 32px;
+  height: 28px;
+
+}
+
+.apple {
+  background-image: url('../images/apple.png');
+  background-position: center;
+  background-size: 48px 28px;
+
+}
+
+.mushroom {
+  background-image: url('../images/mushroom.jpg');
+  background-position: center;
+  background-size: 31px 28px;
+}
+
+.container {
+  background: var(--main--color);
+  border-radius: 10px;
+}
+
+.score {
+  color: var(--bg--color);
+
+}
+
+.display-lv {
+  flex: 1
+}
+
+.bg-success {
+  background-color: var(--main--color) !important;
+}
+
+.bg-primary {
+  background-color: var(--body--snake) !important;
+}
+.nav{
+  position: relative;
+}
+.introduce-guide{
+  position: absolute;
+  top:0;
+  left:10px;
+  width: 50px;
+  height:50px;
+  object-fit: contain;
+  cursor: pointer;
+}
+.introduce-guide i{
+  font-size: 50px;
+  color: white;
+}
+
+.introduce-avatar{
+  position: absolute;
+  top:0;
+  right:10px;
+  width: 40px;
+  border-radius:50%;
+  object-fit: contain;
+  cursor: pointer;
+}
+.nav .introduce-information{
+  position: fixed;
+  top: 0;
+  width: 264px;
+  margin-top: 16px;
+  height: 86.5%;
+  background-color: white;
+  z-index: 9999;
+  border-radius: 8px;
+  margin-right: 0;
+
+}
+.hidden1, .hidden2 {
+  display: none;
+}
+// describe
+.describe{
+margin-top:20px;
+  float:left;
+}
+.close{
+  position: absolute;
+  font-size: 20px;
+  top:10px;
+  right:10px;
+  cursor: pointer;
+}
+
+.avatar{
+  width: 50%;
+  margin: 30px auto;
+}
+.avatar img{
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+.scrollable {
+  margin: 40px 10px;
+  overflow-y: auto;
+  max-height: 500px;
+}
+

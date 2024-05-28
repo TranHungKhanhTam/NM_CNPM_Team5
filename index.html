@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GAME SNAKE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-reboot.css">
+    <link rel="stylesheet" href="css/bootstrap-grid.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+<div class="container d-flex">
+
+    <div class="game mt-3 mb-3">
+        <div class="alert alert-danger alert-lv" role="alert">Vui lòng chọn level trước khi bắt đầu!</div>
+        <h2 class="gameover">Thất bại</h2>
+        <h2 class="win">Chiến thắng</h2>
+        <h2 class="welcome">Game Snake</h2>
+    </div>
+    <div class="nav d-flex flex-wrap ">
+        <div id="hidden1" class="introduce-information hidden1">
+            <div class="close" onclick="toggleDiv1()">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+           <div class="avatar">
+               <img src="images/avatar.jpg" alt="Hình đại diện">
+           </div>
+            <div class="describe">
+                <span class="d-flex text-center justify-content-around">Họ và tên: <h5>Lê Chí Trường</h5></span>
+                <span class="d-flex text-center justify-content-around">MSSV: <h5>21130591</h5></span>
+                <span class="d-flex text-center justify-content-around">Lớp: <h5>DH21DTD</h5></span>
+                <span class="d-flex text-center justify-content-around">Đề tài: <h5>Game Snake</h5></span>
+            </div>
+        </div>
+        <div id="hidden2" class="introduce-information hidden2">
+            <div class="close" onclick="toggleDiv2()">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+            <div class="describe scrollable">
+                <h2>Hướng dẫn chơi</h2>
+                <span><h4>Level 1:</h4>
+                - Đây là level cơ bản đầu tiên giúp người dùng làm quen với game rắn săn mồi.
+                    <br>- Người dùng sử dụng 4 nút mũi tên trên bàn phím để điều khiển rắn theo hướng mình muốn.
+                    <br>- Người dùng có thể quay đầu lại bằng cách đi đến cuối thì nó sẽ xuất hiện ở phía ngược lại
+                    <br>- Khi người dùng ăn được quả táo thì điểm sẽ được cộng lên 10 , và kích thước của rắn tăng lên 1.
+                    <br>- Người dùng chiến thắng khi đạt 100 điểm.
+                </span><br>
+                <span><h4>Level 2:</h4>
+                - Tương tự như level 1, điểm khác ở đây là có xuất hiện tường, nếu người dùng đi trúng tường thì sễ thua cuộc
+                </span><br>
+                <span><h4>Level 3:</h4>
+                - Cộng dồn level 2, điểm khác là có xuất hiện them boom, nếu rắn ăn boom thì thua cuộc
+                    <br>- Số lượng boom sẽ được tang dần mỗi khi người dùng ăn táo, và sẽ được tăng lên mỗi 2 nếu số điểm hiện tại của người dùng lớn hơn.
+                </span><br>
+                <span><h4>Level 4:</h4>
+                - Cộng dồn các level trước, điểm khác là có xuất hiện thêm nấm, nếu rắn ăn nấm thì sẽ đi ngược với hướng chỉ định trong vòng 3s
+                </span><br>
+                <span><h4>Level 5:</h4>
+                - Cộng dồn với các level trước, điểm khác là tốc độ rắn chạy sẽ tăng 1.5 lần.
+                </span><br>
+                <span><h4>Level 6:</h4>
+                -	Cuối cùng là level 6, tiếp tục cộng dồn từ các level cũ và điểm khác biệt ở đây là sẽ xuất hiện them 2 con boss, nó có khả năng đi xuyên tường, rắn cần phải tránh nó, nếu không sẽ thua cuộc.
+                </span><br>
+            </div>
+        </div>
+        <div class="introduce" >
+            <div class="introduce-guide" onclick="toggleDiv2()">
+                <i class="fa-solid fa-person-chalkboard"></i>
+            </div>
+            <div class="introduce-avatar" onclick="toggleDiv1()">
+                <img src="images/avatar.jpg" style="width: 100%;" alt="Ảnh đại diện">
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-between" style="width: 90%">
+            <div class="score">Điểm số: <strong>0</strong></div>
+            <a href="javascript:;" id="new">Chơi mới</a></div>
+        <div class="d-flex align-items-center justify-content-between " style="width: 90%">
+            <select class="custom-select mr-sm-2" id="level">
+                <option selected value="0">Chọn Level</option>
+                <option value="1">Level 1</option>
+                <option value="2">Level 2</option>
+                <option value="3">Level 3</option>
+                <option value="4">Level 4</option>
+                <option value="5">Level 5</option>
+                <option value="6">Level 6</option>
+            </select>
+            <a href="javascript:;" id="play">Bắt đầu</a>
+        </div>
+    </div>
+</div>
+<script src="js/jquery-3.6.3.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
