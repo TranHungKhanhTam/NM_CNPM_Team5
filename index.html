@@ -164,7 +164,8 @@
         <div class="d-flex align-items-center justify-content-between" style="width: 90%">
             <div class="score">Điểm số: <strong>0</strong></div>
             <a href="javascript:;" id="new">Chơi mới</a></div>
-            <button id="setting" style="padding: 15px;font-size: 20px; border-radius: 10px; background-color: white; border: none; color: #518111">Thiết lập cấu hình game</button>
+
+        <button id="setting" style="padding: 15px;font-size: 20px; border-radius: 10px; background-color: white; border: none; color: #518111">Thiết lập cấu hình game</button>
         <div class="d-flex align-items-center justify-content-between " style="width: 90%">
             <select class="custom-select mr-sm-2" id="level">
                 <option selected value="0">Chọn Level</option>
@@ -191,8 +192,9 @@
         <input type="range" id="scaleControl" name="scale" min="1" max="1.5" step="0.1" value="1">
         <br><br>
         <label for="colorControl">Màu sắc màn hình:</label>
-        <input type="color" id="colorControl" name="color" value="#518111">
-        <p id="selectedColor">Màu đã chọn: #518111</p>
+
+        <input type="color" id="colorControl" name="color" value="#ffffff">
+        <p id="selectedColor">Màu đã chọn: #ffffff</p>
         <br><br>
         <button id="saveButton">Lưu</button>
     </div>
@@ -207,7 +209,7 @@
         <button id="btnReplay">Chơi lại</button>
     </div>
 </div>
-<!-- Nhúng tệp âm thanh vào -->
+<!-- Nhúng tệp âm thanh -->
 
 <audio autoplay loop id="buttonSound">
     <source src="audio/nhacnen.mp3" type="audio/mpeg">
