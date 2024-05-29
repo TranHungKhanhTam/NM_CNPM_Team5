@@ -20,39 +20,142 @@ let isPutMushroom = false;// bien ktra xem da ve nam chua
 let isToxic = false;// bien ktra xem da bi dinh doc chua
 let timeInitToxic // thời gian khởi tạo lại nấm độc
 let timeToxic // thời gian rắn bị dính độc
-//boss
-let boss1, boss2;// 2 boss o lv6
-let x_boss1, y_boss1, x_boss2, y_boss2;// toa do boss
 let playing; // bien dieu khien tro choi(di chuyen, ktra va cham) => muc dich tang toc do di chuyen, toc do cap nhat (dung o lv5 va lv6)
 let drawing; // thoi gian ve(boom, food, mushroom, giao dien)
 // đặt thời gian chạy cho hàm interval
-let timeInterval = 150
+// Lấy phần tử modal
+// Khai báo biến timeInterval và gán giá trị mặc định
+let timeInterval = 150;
+let snakeColor = '#ffffff';
 
-// mo/dong option gioi thieu ve ban than
-function toggleDiv1() {
-    var div = document.getElementById("hidden1");
-    if (div.classList.contains("hidden1")) {
-        div.classList.remove("hidden1");
-    } else {
-        div.classList.add("hidden1");
+//*LĨNH BEGIN
+// Lấy phần tử modal
+var modal = document.getElementById("configModal");
+
+var modal1 = document.getElementById("configModal1");
+
+// Lấy phần tử điều khiển tỷ lệ
+var scaleControl = document.getElementById("scaleControl");
+
+// Lấy phần tử button mở modal
+var btn = document.getElementById("setting");
+
+// Lấy phần tử button mở modal
+var btn1 = document.getElementById("setting1");
+
+var btnContinue = document.getElementById("btnPlayContinue");
+var btnClose = document.getElementById("btnClose");
+var btnReplay = document.getElementById("btnReplay");
+
+// Lấy phần tử <span> đóng modal
+var span = document.getElementsByClassName("close")[0];
+
+// Lấy phần tử âm thanh
+var sound = document.getElementById("buttonSound");
+
+// Lấy phần tử điều khiển âm lượng
+var volumeControl = document.getElementById("volumeControl");
+
+// Lấy phần tử điều khiển tốc độ
+var speedControl = document.getElementById("speedControl");
+
+// Lấy phần tử điều khiển màu sắc
+var colorControl = document.getElementById("colorControl");
+
+// Lấy phần tử hiển thị mã màu
+var selectedColor = document.getElementById("selectedColor");
+
+
+// Khi người dùng nhấn vào nút, mở modal và phát âm thanh
+btn.onclick = function() {
+    modal.style.display = "block";
+    sound.play();
+}
+
+
+
+
+// Khi người dùng nhấn vào bất cứ đâu bên ngoài modal, đóng modal
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
     }
 }
-// mo dong option huong dan su dung
-function toggleDiv2() {
-    var div = document.getElementById("hidden2");
-    if (div.classList.contains("hidden2")) {
-        div.classList.remove("hidden2");
+
+// Khi người dùng thay đổi giá trị thanh trượt âm lượng
+volumeControl.oninput = function() {
+    sound.volume = volumeControl.value;
+    localStorage.setItem('volume', volumeControl.value); // Lưu giá trị âm lượng ngay lập tức
+}
+
+// Khi người dùng thay đổi giá trị thanh trượt tốc độ
+speedControl.oninput = function() {
+    timeInterval = speedControl.value;
+    localStorage.setItem('timeInterval', speedControl.value); // Lưu giá trị tốc độ ngay lập tức
+}
+
+// Khi người dùng thay đổi giá trị bộ chọn màu
+colorControl.oninput = function() {
+    snakeColor = colorControl.value;
+    selectedColor.textContent = 'Màu đã chọn: ' + colorControl.value; // Hiển thị mã màu đã chọn
+    localStorage.setItem('snakeColor', colorControl.value); // Lưu giá trị màu sắc ngay lập tức
+
+// Cập nhật màu sắc cho các ô của rắn
+    $('.cell.snake').css('background-color', snakeColor);
+}
+
+scaleControl.oninput = function() {
+    scale = parseFloat(scaleControl.value);
+    localStorage.setItem('scale', scaleControl.value); // Lưu giá trị tỷ lệ ngay lập tức
+    $('#gameBoard').css('transform', `scale(${scale})`); // Cập nhật tỷ lệ cho bảng
+}
+
+window.onload = function() {
+    var savedVolume = localStorage.getItem('volume');
+    var savedSpeed = localStorage.getItem('timeInterval');
+    var savedColor = localStorage.getItem('snakeColor');
+
+    if (savedVolume !== null) {
+        volumeControl.value = savedVolume;
+        sound.volume = savedVolume;
     } else {
-        div.classList.add("hidden2");
+        volumeControl.value = 1; // Giá trị mặc định nếu chưa có cấu hình lưu
+        sound.volume = 1;
+    }
+
+    if (savedSpeed !== null) {
+        speedControl.value = savedSpeed;
+        timeInterval = savedSpeed;
+    } else {
+        speedControl.value = 150; // Giá trị mặc định nếu chưa có cấu hình lưu
+        timeInterval = 150;
+    }
+
+    if (savedColor !== null) {
+        colorControl.value = savedColor;
+        snakeColor = savedColor;
+        selectedColor.textContent = 'Màu đã chọn: ' + savedColor;
+
+        // Cập nhật màu sắc cho các ô của rắn khi tải trang
+        $('.cell.snake').css('background-color', savedColor);
+    } else {
+        colorControl.value = '#518111'; // Giá trị mặc định nếu chưa có cấu hình lưu
+        snakeColor = '#518111';
+        selectedColor.textContent = 'Màu đã chọn: #518111';
+
+        // Cập nhật màu sắc cho các ô của rắn khi tải trang
+        $('.cell.snake').css('background-color', '#518111');
     }
 }
+//*LĨNH END
+
 // xóa tất cả rắn , tường , thức ăn, nấm và boom nếu có
 function clearAll() {
     for (let i = 0; i < row; i++) {
         for (let j = 0; j < col; j++) {
             $('.cell' + '-' + i + '-' + j).removeClass('mushroom');
             $('.cell' + '-' + i + '-' + j).removeClass('bg-danger');
-            $('.cell' + '-' + i + '-' + j).removeClass('bg-primary');
+            $('.cell' + '-' + i + '-' + j).removeClass('bg-dark').css('background-color', snakeColor);
             $('.cell' + '-' + i + '-' + j).removeClass('bg-success');
             $('.cell' + '-' + i + '-' + j).removeClass('apple');
             $('.cell' + '-' + i + '-' + j).removeClass('boom');
@@ -184,15 +287,7 @@ function run() {
 function initSnake(level) {
     // xóa đi các hàm intervals khi khởi tạo lại con rắn
     clearIntervals()
-    // rắn ban đầu có chiều thẳng đứng snake = [[x, y], [x + 1, y], [x + 2, y]];
     if (level == 1) {
-        x = parseInt(Math.random() * 20);
-        y = parseInt(Math.random() * 25);
-        snake = [[x, y], [x + 1, y], [x + 2, y]];
-        playing = setInterval(run, timeInterval);
-        drawing = setInterval(drawSnake, timeInterval);
-    }
-    if (level == 2) {
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 23
         x = parseInt(Math.random() * 10) + 5;
         y = parseInt(Math.random() * 23) + 1;
@@ -200,7 +295,7 @@ function initSnake(level) {
         drawing = setInterval(drawSnake, timeInterval);
         playing = setInterval(run, timeInterval);
     }
-    if (level == 3) {
+    if (level == 2) {
                 //  tránh không bắt đầu trên tường
                 // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 11
                 x = parseInt(Math.random() * 10) + 7;
@@ -210,38 +305,15 @@ function initSnake(level) {
         drawing = setInterval(drawSnake, timeInterval);
         playing = setInterval(run, timeInterval);
     }
-    if (level == 4) {
-        // để tránh không bắt đầu trên tường
-        // x : dòng, y : cột
-        // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 7
+    if (level == 3) {
+        //  tránh không bắt đầu trên tường
+        // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 11
         x = parseInt(Math.random() * 10) + 7;
-        y = parseInt(Math.random() * 7) + 1;
+        y = parseInt(Math.random() * 11) + 1;
 
         snake = [[x, y], [x + 1, y], [x + 2, y]];
-        drawing = setInterval(drawSnake,  timeInterval);
+        drawing = setInterval(drawSnake, timeInterval);
         playing = setInterval(run, timeInterval);
-    }
-    if (level == 5) {
-
-                // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 5
-                x = parseInt(Math.random() * 10) + 7;
-                y = parseInt(Math.random() * 5) + 1;
-
-                snake = [[x, y], [x + 1, y], [x + 2, y]];
-        // nếu điểm lớn 60 thì tăng tốc độ lên(tăng tốc độ cập nhât con rắn)
-                drawing = setInterval(drawSnake, score >= 60 ? 120 : timeInterval);
-                playing = setInterval(run, score >= 60 ? 120 : timeInterval);
-    }
-    if (level == 6) {
-                // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 5
-                x = parseInt(Math.random() * 10) + 7;
-                y = parseInt(Math.random() * 5) + 1;
-       // tao boss
-        initBoss();
-        snake = [[x, y], [x + 1, y], [x + 2, y]];
-        // nếu điểm lớn 60 thì tăng tốc độ lên(tăng tốc độ cập nhât con rắn)
-        drawing = setInterval(drawSnake, score >= 60 ? 100 : timeInterval);
-        playing = setInterval(run, score >= 60 ? 100 : timeInterval);
     }
 }
 
@@ -251,7 +323,7 @@ function drawSnake() {
     for (let i = 0; i < row; i++) {
         for (let j = 0; j < col; j++) {
             $('.cell' + '-' + i + '-' + j).removeClass('bg-danger');
-            $('.cell' + '-' + i + '-' + j).removeClass('bg-primary');
+            $('.cell' + '-' + i + '-' + j).removeClass('bg-dark').css('background-color', snakeColor);
         }
     }
     // vẽ lại con rắn
@@ -266,10 +338,11 @@ function draw(x, y) {
         $('.cell' + '-' + x + '-' + y).addClass('bg-danger');
     } else {
         // vẽ thân con rắn
-        $('.cell' + '-' + x + '-' + y).addClass('bg-primary');
+        $('.cell' + '-' + x + '-' + y).addClass('bg-dark').css('background-color', snakeColor);
     }
 }
 
+//*LUÂN BEGIN
 // hàm di chuyển
 function handleSnakeMove() {
     // di chuyển con rắn
@@ -367,9 +440,12 @@ function handleKeyDownEvent() {
                 isDown = true
             }
         }
-    };
+    }
 }
+//*LUÂN END
 
+
+//*TÂN BEGIN
 // hàm rắn đi xuyên tường
 function crossWall() {
     // xuyên tường bên trên thì đầu sẽ xuất hiện bên dưới và ngược lại
@@ -387,6 +463,7 @@ function crossWall() {
         cell[1] = 0
     }
 }
+//*TÂN END
 
 // hàm vẽ tường từ lv 2 trở lên
 // i : hàng ngang
@@ -416,6 +493,7 @@ function drawWall() {
     }
 }
 
+//*TÂN BEGIN
 // hàm kiểm tra rắn đã ăn quả táo chưa
 function checkEat() {
     // nếu vị trí đầu của con rắn trùng với vị trí của quả táo
@@ -431,6 +509,7 @@ function checkEat() {
         isPutBoom = false;
     }
 }
+//*TÂN END
 
 //hàm khởi tạo quả táo
 function initFood() {
@@ -480,32 +559,6 @@ function initFood() {
                 }
             }
         }
-        // nếu điểm <= 40 thì đặt 1 lần 1 quả
-        if (level == 4 && !isPutBoom) {
-            if (score <= 40) {
-                x_boom = parseInt(Math.random() * 19) + 1;
-                y_boom = parseInt(Math.random() * 23) + 1;
-                drawBoom(x_boom, y_boom)
-            }
-            // ngược lại đặt từ 0 đến 3 quả
-            else {
-                for (let i = 0; i < 3; i++) {
-                    x_boom = parseInt(Math.random() * 19) + 1;
-                    y_boom = parseInt(Math.random() * 23) + 1;
-                    drawBoom(x_boom, y_boom)
-                }
-            }
-        }
-        if (level == 5 && !isPutBoom) {
-            x_boom = parseInt(Math.random() * 19) + 1;
-            y_boom = parseInt(Math.random() * 23) + 1;
-            drawBoom(x_boom, y_boom)
-        }
-        if (level == 6 && !isPutBoom) {
-            x_boom = parseInt(Math.random() * 19) + 1;
-            y_boom = parseInt(Math.random() * 23) + 1;
-            drawBoom(x_boom, y_boom)
-        }
     }
 
     function drawBoom(x, y) {
@@ -518,6 +571,7 @@ function initFood() {
         isPutBoom = true
     }
 
+//*TÂN BEGIN
 // hàm kiểm tra xem các vật trong game có bị chồng lên nhau không
     function checkStackUp() {
         // kiểm tra xem lúc khởi tạo quả táo hoặc boom hoặc nấm có trùng với tường không
@@ -545,7 +599,7 @@ function initFood() {
 
         }
     }
-
+//*TÂN END
 // hàm phát triển ( dài thêm )
     function grown() {
         // lấy vị trí cuối trừ vị trí kề cuối dể biết rắn đang nằm ngang hay dọc
@@ -658,7 +712,7 @@ function initFood() {
         // nếu đầu con rắn có tên class trùng tường hoặc boom hoặc thân hoặc boss thì game kết thúc
         if ($('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-success') // bg tường
             || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('boom') // bg boom
-            || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-primary') // bg thân rắn
+            || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-dark')// bg thân rắn
             || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-secondary') // boss
         ) {
             // xóa tất cả các lớp vật thể trên màn hình
@@ -702,3 +756,59 @@ function initFood() {
         }
     }
 
+//*TÂM BEGIN
+btn1.onclick = function() {
+    clearIntervals();
+    modal1.style.display = "block"
+}
+
+btnContinue.onclick = function (){
+    modal1.style.display = "none"
+    setInterval(drawSnake,timeInterval)
+    setInterval(run,timeInterval)
+}
+
+btnClose.onclick = function (){
+    modal1.style.display = "none"
+    $('#btnClose').click(function () {
+        // hiện chữ snake lời chào của game sau 0.1s
+        $('.welcome').show(100)
+        // reset lại các biến về giá trị ban đầu
+        clearTimeouts()
+        resetValue()
+        $('#level').val("0").change()
+
+        $('.score').html(`Điểm số: <strong>${score}</strong>`)
+        // xóa các lớp trên màn hình và các interval đang chạy
+        clearAll()
+        clearIntervals()
+    });
+}
+
+btnReplay.onclick = function (){
+    modal1.style.display = "none"
+    $('#btnReplay').click(function() {
+        // xóa hết các hàm reset lại các giá trị về ban
+        resetValue()
+        clearTimeouts()
+        clearAll()
+        level = $('#level').val();
+
+        if (level >= 1) { // nếu đã chọn level
+            // khóa nút chọn level và bắt đầu
+            $('#level').prop('disabled', true);
+            $('#play').prop('disabled', true);
+            // ẩn chữ SNAKE
+            $('.welcome').hide(100)
+
+            initSnake(level)
+        } else {
+            // hiện alert chưa chọn level sau 3s thì ẩn đi
+            $('.alert-lv').slideDown();
+            setTimeout(() => {
+                $('.alert-lv').slideUp();
+            }, 3000);
+        }
+    });
+}
+//*TÂM END
