@@ -181,6 +181,8 @@ function clearTimeouts() {
     clearTimeout(timeInitToxic)
 }
 
+// TRẦN HƯNG KHÁNH TÂM - CHỨC NĂNG RESET TẤT CẢ - BEGIN
+
 // reset tất cả về trạng thái ban đầu
 function resetValue() {
     way = 0
@@ -230,6 +232,9 @@ $(document).ready(function () {
             }, 3000);
         }
     });
+    
+
+    
     // CLICK CHƠI MỚI
     $('#new').click(function () {
         // hiện chữ snake lời chào của game sau 0.1s
@@ -254,6 +259,8 @@ $(document).ready(function () {
         $('.game').append(r);
     }
 })
+// TRẦN HƯNG KHÁNH TÂM - CHỨC NĂNG RESET - BEGIN
+
 
 // hàm run game
 function run() {
@@ -374,6 +381,7 @@ function draw(x, y) {
         $('.cell' + '-' + x + '-' + y).addClass('bg-dark').css('background-color', snakeColor);
     }
 }
+
 
 //*LUÂN BEGIN
 // hàm di chuyển
@@ -807,18 +815,18 @@ function winGame() {
     }
 }
 
-//*TÂM BEGIN
+//TRẦN HƯNG KHÁNH TÂM - CHỨC NĂNG STOP
 btn1.onclick = function() {
     clearIntervals();
     modal1.style.display = "block"
 }
-
+//TRẦN HƯNG KHÁNH TÂM - CHỨC NĂNG "CHƠI TIẾP"
 btnContinue.onclick = function (){
     modal1.style.display = "none"
     setInterval(drawSnake,timeInterval)
     setInterval(run,timeInterval)
 }
-
+//TRẦN HƯNG KHÁNH TÂM - CHỨC NĂNG "THOÁT"
 btnClose.onclick = function (){
     modal1.style.display = "none"
     $('#btnClose').click(function () {
@@ -835,7 +843,7 @@ btnClose.onclick = function (){
         clearIntervals()
     });
 }
-
+//TRẦN HƯNG KHÁNH TÂM - CHỨC NĂNG "CHƠI LẠI"
 btnReplay.onclick = function (){
     modal1.style.display = "none"
     $('#btnReplay').click(function() {
@@ -862,4 +870,4 @@ btnReplay.onclick = function (){
         }
     });
 }
-//*TÂM END
+//TRẦN HƯNG KHÁNH TÂM - CHỨC NĂNG STOP - END
