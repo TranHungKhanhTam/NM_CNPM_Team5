@@ -26,9 +26,7 @@ let drawing; // thoi gian ve(boom, food, mushroom, giao dien)
 // Lấy phần tử modal
 // Khai báo biến timeInterval và gán giá trị mặc định
 let timeInterval = 150;
-
-let snakeColor = '#ffffff';
-
+let snakeColor = '#518111';
 
 //*LĨNH BEGIN
 // Lấy phần tử modal
@@ -120,7 +118,6 @@ window.onload = function() {
     if (savedVolume !== null) {
         volumeControl.value = savedVolume;
         sound.volume = savedVolume;
-
     } else {
         volumeControl.value = 1; // Giá trị mặc định nếu chưa có cấu hình lưu
         sound.volume = 1;
@@ -142,7 +139,6 @@ window.onload = function() {
         // Cập nhật màu sắc cho các ô của rắn khi tải trang
         $('.cell.snake').css('background-color', savedColor);
     } else {
-
         colorControl.value = '#518111'; // Giá trị mặc định nếu chưa có cấu hình lưu
         snakeColor = '#518111';
         selectedColor.textContent = 'Màu đã chọn: #518111';
@@ -242,6 +238,7 @@ $(document).ready(function () {
         clearTimeouts()
         resetValue()
         $('#level').val("0").change()
+
         $('.score').html(`Điểm số: <strong>${score}</strong>`)
         // xóa các lớp trên màn hình và các interval đang chạy
         clearAll()
@@ -294,7 +291,6 @@ function initSnake(level) {
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 23
         x = parseInt(Math.random() * 10) + 5;
         y = parseInt(Math.random() * 23) + 1;
-
         snake = [[x, y], [x + 1, y], [x + 2, y]];
         drawing = setInterval(drawSnake, timeInterval);
         playing = setInterval(run, timeInterval);
@@ -304,16 +300,6 @@ function initSnake(level) {
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 11
         x = parseInt(Math.random() * 10) + 7;
         y = parseInt(Math.random() * 11) + 1;
-        snake = [[x, y], [x + 1, y], [x + 2, y]];
-        drawing = setInterval(drawSnake, timeInterval);
-        playing = setInterval(run, timeInterval);
-    }
-
-    if (level == 3) {
-        //  tránh không bắt đầu trên tường
-        // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 11
-        x = parseInt(Math.random() * 10) + 7;
-        y = parseInt(Math.random() * 11) + 1;
 
         snake = [[x, y], [x + 1, y], [x + 2, y]];
         drawing = setInterval(drawSnake, timeInterval);
@@ -329,7 +315,17 @@ function initSnake(level) {
         drawing = setInterval(drawSnake, timeInterval);
         playing = setInterval(run, timeInterval);
     }
+    if (level == 4) {
+        // để tránh không bắt đầu trên tường
+        // x : dòng, y : cột
+        // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 7
+        x = parseInt(Math.random() * 10) + 7;
+        y = parseInt(Math.random() * 7) + 1;
 
+        snake = [[x, y], [x + 1, y], [x + 2, y]];
+        drawing = setInterval(drawSnake,  timeInterval);
+        playing = setInterval(run, timeInterval);
+    }
     if (level == 5) {
 
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 5
@@ -352,7 +348,6 @@ function initSnake(level) {
         drawing = setInterval(drawSnake, score >= 60 ? 100 : timeInterval);
         playing = setInterval(run, score >= 60 ? 100 : timeInterval);
     }
-
 }
 
 //hàm vẽ con rắn
@@ -482,6 +477,7 @@ function handleKeyDownEvent() {
 }
 //*LUÂN END
 
+
 //*TÂN BEGIN
 // hàm rắn đi xuyên tường
 function crossWall() {
@@ -531,22 +527,83 @@ function drawWall() {
 }
 
 //*TÂN BEGIN
+// Bước 1: Hệ thống xác định vị trí hiện tại của đầu rắn, thân rắn, mồi và vật cản trong màn chơi.
+// Bước 2: Hệ thống sẽ kiểm tra xem có va chạm nào xảy ra dựa trên các vị trí tính toán được trong bước trước đó hay không:
+
 // hàm kiểm tra rắn đã ăn quả táo chưa
-function checkEat() {
-    // nếu vị trí đầu của con rắn trùng với vị trí của quả táo
-    // thì xóa class thức ăn và tăng chiều dài rắn
+function checkEat() {    
+    // 2.1 Nếu vị trí đầu của con rắn trùng với vị trí của quả táo thì xóa class thức ăn và tăng chiều dài rắn. Hệ thống chuyển đến bước 3
     if (snake[0][0] === x_food && snake[0][1] === y_food
         || $('.cell' + '-' + x_food + '-' + y_food).hasClass('bg-danger')) {
         $('.cell' + '-' + x_food + '-' + y_food).removeClass('apple');
         isEat = true
-        // tăng kích thước và cộng điểm
+        // Tăng kích thước và cộng điểm
         grown()
         score += 10
-        // ăn 1 quả táo thêm boom ở lv 3 trở lên
+        // Mồi cũ sẽ biến mất, mồi mới được tạo ở vị trí ngẫu nhiên
+        // Ăn 1 quả táo thêm boom ở lv 3 trở lên
         isPutBoom = false;
     }
 }
+
+    // 2.2 Nếu đầu rắn trùng với vị trí của nấm, có nghĩa là rắn đã ăn phải nấm độc. Hệ thống chuyển đến bước 4.
+    // 2.3 Nếu đầu rắn có tên class trùng với tường, boom hoặc thân rắn hoặc boss thì game kết thúc. Hệ thống chuyển đến bước 5.
+
 //*TÂN END
+
+//*TÂN BEGIN
+//Bước 3: Rắn ăn mồi
+// hàm tăng chiều dài con rắn
+function grown() {
+    // Lấy vị trí cuối trừ vị trí kề cuối dể biết rắn đang nằm ngang hay dọc
+    // nếu x = 0 thì rắn đang nằm ngang , y = 0 thì rắn đang nằm dọc
+    // cộng vào cuối chuỗi của con rắn
+    let x = snake[snake.length - 1][0] - snake[snake.length - 2][0]
+    let y = snake[snake.length - 1][1] - snake[snake.length - 2][1]
+    snake.push([x + snake[snake.length - 1][0], y + snake[snake.length - 1][1]])
+}
+//*TÂN END
+
+//*TÂN BEGIN
+// Hàm kiểm tra dính độc
+function checkToxic() {
+    // Bước 4: Nếu đầu rắn trùng với vị trí nấm nghĩa là rắn đã ăn phải nấm độc.
+    if ($(".cell" + "-" + snake[0][0] + "-" + snake[0][1]).hasClass("mushroom")) {
+        $(".cell" + "-" + snake[0][0] + "-" + snake[0][1]).removeClass('mushroom')
+        isToxic = true
+        // Rắn bị dính độc sẽ di chuyển đi ngược chiều với hướng di chuyển thông thường trong 3s.
+        // (Ví dụ: Nếu bấm nút di chuyển sang trái thì rắn sẽ di chuyển sang phải)
+        timeToxic = setTimeout(() => {
+            isToxic = false
+        }, 3000)
+    }
+}
+//*TÂN END
+
+//*TÂN BEGIN
+// hàm kiểm tra điều kiện kết thúc game
+function gameOver() {
+    // Bước 5: Nếu đầu con rắn có tên class trùng tường hoặc boom hoặc thân hoặc boss thì game kết thúc
+    if ($('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-success') // bg tường
+        || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('boom') // bg boom
+        || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-dark')// bg thân rắn
+        || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-secondary') // boss
+    ) {
+        // Xóa tất cả các lớp vật thể trên màn hình
+        clearAll()
+        // Hiện chữ game over
+        $('.gameover').css({
+            'left': '163px',
+            'visibility': 'visible'
+        })
+        // Nút 'bắt đầu' đổi thành 'chơi lại'
+        $('#play').text('Chơi lại')
+        // Xóa tất cả các interval
+        clearIntervals()
+    }
+}
+//*TÂN END
+
 
 //hàm khởi tạo quả táo
 function initFood() {
@@ -595,7 +652,6 @@ function initBoom() {
                 drawBoom(x_boom, y_boom)
             }
         }
-
     }
 }
 
@@ -634,29 +690,11 @@ function checkStackUp() {
             }
 
         }
-    }
-//*TÂN END
-// hàm phát triển ( dài thêm )
-    function grown() {
-        // lấy vị trí cuối trừ vị trí kề cuối dể biết rắn đang nằm ngang hay dọc
-        // nếu x = 0 thì rắn đang nằm ngang , y = 0 thì rắn đang nằm dọc
-        // cộng vào cuối chuỗi của con rắn
-        let x = snake[snake.length - 1][0] - snake[snake.length - 2][0]
-        let y = snake[snake.length - 1][1] - snake[snake.length - 2][1]
-        snake.push([x + snake[snake.length - 1][0], y + snake[snake.length - 1][1]])
 
     }
 }
 //*TÂN END
-// hàm phát triển ( dài thêm )
-function grown() {
-    // lấy vị trí cuối trừ vị trí kề cuối dể biết rắn đang nằm ngang hay dọc
-    // nếu x = 0 thì rắn đang nằm ngang , y = 0 thì rắn đang nằm dọc
-    // cộng vào cuối chuỗi của con rắn
-    let x = snake[snake.length - 1][0] - snake[snake.length - 2][0]
-    let y = snake[snake.length - 1][1] - snake[snake.length - 2][1]
-    snake.push([x + snake[snake.length - 1][0], y + snake[snake.length - 1][1]])
-}
+
 
 // hàm khởi tạo cho 2 con boss
 function initBoss() {
@@ -741,43 +779,6 @@ function toxic() {
     checkToxic();
 }
 
-
-// kiểm tra dính độc
-function checkToxic() {
-    // nếu dính độc là đầu rắn trùng với vị trí nấm
-    if ($(".cell" + "-" + snake[0][0] + "-" + snake[0][1]).hasClass("mushroom")) {
-        $(".cell" + "-" + snake[0][0] + "-" + snake[0][1]).removeClass('mushroom')
-        isToxic = true
-        // rắn bị dính độc đi ngược chiều với hướng di chuyển thông thường trong 3s
-        timeToxic = setTimeout(() => {
-            isToxic = false
-        }, 3000)
-    }
-}
-
-// hàm điều kiện kết thúc game
-
-function gameOver() {
-    // nếu đầu con rắn có tên class trùng tường hoặc boom hoặc thân hoặc boss thì game kết thúc
-    if ($('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-success') // bg tường
-        || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('boom') // bg boom
-        || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-dark')// bg thân rắn
-        || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-secondary') // boss
-    ) {
-        // xóa tất cả các lớp vật thể trên màn hình
-        clearAll()
-        // hiện chữ game over
-        $('.gameover').css({
-            'left': '163px',
-            'visibility': 'visible'
-        })
-        // nút 'bắt đầu' đổi thành 'chơi lại'
-        $('#play').text('Chơi lại')
-        // xóa tất cả các interval
-        clearIntervals()
-
-    }
-}
 
 // hàm điều kiện win game
 function winGame() {
