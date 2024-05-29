@@ -26,9 +26,7 @@ let drawing; // thoi gian ve(boom, food, mushroom, giao dien)
 // Lấy phần tử modal
 // Khai báo biến timeInterval và gán giá trị mặc định
 let timeInterval = 150;
-
-let snakeColor = '#ffffff';
-
+let snakeColor = '#518111';
 
 //*LĨNH BEGIN
 // Lấy phần tử modal
@@ -120,7 +118,6 @@ window.onload = function() {
     if (savedVolume !== null) {
         volumeControl.value = savedVolume;
         sound.volume = savedVolume;
-
     } else {
         volumeControl.value = 1; // Giá trị mặc định nếu chưa có cấu hình lưu
         sound.volume = 1;
@@ -142,7 +139,6 @@ window.onload = function() {
         // Cập nhật màu sắc cho các ô của rắn khi tải trang
         $('.cell.snake').css('background-color', savedColor);
     } else {
-
         colorControl.value = '#518111'; // Giá trị mặc định nếu chưa có cấu hình lưu
         snakeColor = '#518111';
         selectedColor.textContent = 'Màu đã chọn: #518111';
@@ -242,6 +238,7 @@ $(document).ready(function () {
         clearTimeouts()
         resetValue()
         $('#level').val("0").change()
+
         $('.score').html(`Điểm số: <strong>${score}</strong>`)
         // xóa các lớp trên màn hình và các interval đang chạy
         clearAll()
@@ -294,7 +291,6 @@ function initSnake(level) {
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 23
         x = parseInt(Math.random() * 10) + 5;
         y = parseInt(Math.random() * 23) + 1;
-
         snake = [[x, y], [x + 1, y], [x + 2, y]];
         drawing = setInterval(drawSnake, timeInterval);
         playing = setInterval(run, timeInterval);
@@ -304,16 +300,6 @@ function initSnake(level) {
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 11
         x = parseInt(Math.random() * 10) + 7;
         y = parseInt(Math.random() * 11) + 1;
-        snake = [[x, y], [x + 1, y], [x + 2, y]];
-        drawing = setInterval(drawSnake, timeInterval);
-        playing = setInterval(run, timeInterval);
-    }
-
-    if (level == 3) {
-        //  tránh không bắt đầu trên tường
-        // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 11
-        x = parseInt(Math.random() * 10) + 7;
-        y = parseInt(Math.random() * 11) + 1;
 
         snake = [[x, y], [x + 1, y], [x + 2, y]];
         drawing = setInterval(drawSnake, timeInterval);
@@ -329,7 +315,17 @@ function initSnake(level) {
         drawing = setInterval(drawSnake, timeInterval);
         playing = setInterval(run, timeInterval);
     }
+    if (level == 4) {
+        // để tránh không bắt đầu trên tường
+        // x : dòng, y : cột
+        // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 7
+        x = parseInt(Math.random() * 10) + 7;
+        y = parseInt(Math.random() * 7) + 1;
 
+        snake = [[x, y], [x + 1, y], [x + 2, y]];
+        drawing = setInterval(drawSnake,  timeInterval);
+        playing = setInterval(run, timeInterval);
+    }
     if (level == 5) {
 
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 5
@@ -352,7 +348,6 @@ function initSnake(level) {
         drawing = setInterval(drawSnake, score >= 60 ? 100 : timeInterval);
         playing = setInterval(run, score >= 60 ? 100 : timeInterval);
     }
-
 }
 
 //hàm vẽ con rắn
@@ -481,6 +476,7 @@ function handleKeyDownEvent() {
     }
 }
 //*LUÂN END
+
 
 //*TÂN BEGIN
 // hàm rắn đi xuyên tường
@@ -656,7 +652,6 @@ function initBoom() {
                 drawBoom(x_boom, y_boom)
             }
         }
-
     }
 }
 
@@ -695,7 +690,9 @@ function checkStackUp() {
             }
 
         }
+
     }
+}
 //*TÂN END
 
 
