@@ -164,6 +164,7 @@
         <div class="d-flex align-items-center justify-content-between" style="width: 90%">
             <div class="score">Điểm số: <strong>0</strong></div>
             <a href="javascript:;" id="new">Chơi mới</a></div>
+
         <button id="setting" style="padding: 15px;font-size: 20px; border-radius: 10px; background-color: white; border: none; color: #518111">Thiết lập cấu hình game</button>
         <div class="d-flex align-items-center justify-content-between " style="width: 90%">
             <select class="custom-select mr-sm-2" id="level">
@@ -171,9 +172,6 @@
                 <option value="1">Level 1</option>
                 <option value="2">Level 2</option>
                 <option value="3">Level 3</option>
-                <option value="4">Level 4</option>
-                <option value="5">Level 5</option>
-                <option value="6">Level 6</option>
             </select>
             <a href="javascript:;" id="play">Bắt đầu</a>
         </div>
@@ -194,13 +192,13 @@
         <input type="range" id="scaleControl" name="scale" min="1" max="1.5" step="0.1" value="1">
         <br><br>
         <label for="colorControl">Màu sắc màn hình:</label>
+
         <input type="color" id="colorControl" name="color" value="#ffffff">
         <p id="selectedColor">Màu đã chọn: #ffffff</p>
         <br><br>
         <button id="saveButton">Lưu</button>
     </div>
 </div>
-
 
 <div id="configModal1">
     <div id="configModalContent1">
@@ -212,6 +210,7 @@
     </div>
 </div>
 <!-- Nhúng tệp âm thanh -->
+
 <audio autoplay loop id="buttonSound">
     <source src="audio/nhacnen.mp3" type="audio/mpeg">
 </audio>
@@ -219,5 +218,6 @@
 <script src="js/bootstrap.js"></script>
 <script src="js/bootstrap.bundle.js"></script>
 <script src="js/main.js"></script>
+
 </body>
 </html>

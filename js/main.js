@@ -26,7 +26,9 @@ let drawing; // thoi gian ve(boom, food, mushroom, giao dien)
 // Lấy phần tử modal
 // Khai báo biến timeInterval và gán giá trị mặc định
 let timeInterval = 150;
-let snakeColor = '#518111';
+
+let snakeColor = '#ffffff';
+
 
 //*LĨNH BEGIN
 // Lấy phần tử modal
@@ -118,6 +120,7 @@ window.onload = function() {
     if (savedVolume !== null) {
         volumeControl.value = savedVolume;
         sound.volume = savedVolume;
+
     } else {
         volumeControl.value = 1; // Giá trị mặc định nếu chưa có cấu hình lưu
         sound.volume = 1;
@@ -139,6 +142,7 @@ window.onload = function() {
         // Cập nhật màu sắc cho các ô của rắn khi tải trang
         $('.cell.snake').css('background-color', savedColor);
     } else {
+
         colorControl.value = '#518111'; // Giá trị mặc định nếu chưa có cấu hình lưu
         snakeColor = '#518111';
         selectedColor.textContent = 'Màu đã chọn: #518111';
@@ -238,7 +242,6 @@ $(document).ready(function () {
         clearTimeouts()
         resetValue()
         $('#level').val("0").change()
-
         $('.score').html(`Điểm số: <strong>${score}</strong>`)
         // xóa các lớp trên màn hình và các interval đang chạy
         clearAll()
@@ -291,11 +294,22 @@ function initSnake(level) {
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 23
         x = parseInt(Math.random() * 10) + 5;
         y = parseInt(Math.random() * 23) + 1;
+
         snake = [[x, y], [x + 1, y], [x + 2, y]];
         drawing = setInterval(drawSnake, timeInterval);
         playing = setInterval(run, timeInterval);
     }
     if (level == 2) {
+        //  tránh không bắt đầu trên tường
+        // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 11
+        x = parseInt(Math.random() * 10) + 7;
+        y = parseInt(Math.random() * 11) + 1;
+        snake = [[x, y], [x + 1, y], [x + 2, y]];
+        drawing = setInterval(drawSnake, timeInterval);
+        playing = setInterval(run, timeInterval);
+    }
+
+    if (level == 3) {
         //  tránh không bắt đầu trên tường
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 11
         x = parseInt(Math.random() * 10) + 7;
@@ -315,17 +329,7 @@ function initSnake(level) {
         drawing = setInterval(drawSnake, timeInterval);
         playing = setInterval(run, timeInterval);
     }
-    if (level == 4) {
-        // để tránh không bắt đầu trên tường
-        // x : dòng, y : cột
-        // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 7
-        x = parseInt(Math.random() * 10) + 7;
-        y = parseInt(Math.random() * 7) + 1;
 
-        snake = [[x, y], [x + 1, y], [x + 2, y]];
-        drawing = setInterval(drawSnake,  timeInterval);
-        playing = setInterval(run, timeInterval);
-    }
     if (level == 5) {
 
         // bắt đầu từ dòng 7 -> dòng 16 và từ cột 1 -> 5
@@ -348,6 +352,7 @@ function initSnake(level) {
         drawing = setInterval(drawSnake, score >= 60 ? 100 : timeInterval);
         playing = setInterval(run, score >= 60 ? 100 : timeInterval);
     }
+
 }
 
 //hàm vẽ con rắn
@@ -477,7 +482,6 @@ function handleKeyDownEvent() {
 }
 //*LUÂN END
 
-
 //*TÂN BEGIN
 // hàm rắn đi xuyên tường
 function crossWall() {
@@ -591,6 +595,7 @@ function initBoom() {
                 drawBoom(x_boom, y_boom)
             }
         }
+
     }
 }
 
@@ -629,6 +634,16 @@ function checkStackUp() {
             }
 
         }
+    }
+//*TÂN END
+// hàm phát triển ( dài thêm )
+    function grown() {
+        // lấy vị trí cuối trừ vị trí kề cuối dể biết rắn đang nằm ngang hay dọc
+        // nếu x = 0 thì rắn đang nằm ngang , y = 0 thì rắn đang nằm dọc
+        // cộng vào cuối chuỗi của con rắn
+        let x = snake[snake.length - 1][0] - snake[snake.length - 2][0]
+        let y = snake[snake.length - 1][1] - snake[snake.length - 2][1]
+        snake.push([x + snake[snake.length - 1][0], y + snake[snake.length - 1][1]])
 
     }
 }
@@ -741,6 +756,7 @@ function checkToxic() {
 }
 
 // hàm điều kiện kết thúc game
+
 function gameOver() {
     // nếu đầu con rắn có tên class trùng tường hoặc boom hoặc thân hoặc boss thì game kết thúc
     if ($('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-success') // bg tường
@@ -759,6 +775,7 @@ function gameOver() {
         $('#play').text('Chơi lại')
         // xóa tất cả các interval
         clearIntervals()
+
     }
 }
 
