@@ -527,12 +527,13 @@ function drawWall() {
 }
 
 //*TÂN BEGIN
-// Bước 1: Hệ thống xác định vị trí hiện tại của đầu rắn, thân rắn, mồi và vật cản trong màn chơi.
-// Bước 2: Hệ thống sẽ kiểm tra xem có va chạm nào xảy ra dựa trên các vị trí tính toán được trong bước trước đó hay không:
+// Bước 1: Người chơi di chuyển con rắn
+// Bước 2: Hệ thống xác định vị trí hiện tại của đầu rắn, thân rắn, mồi và vật cản trong màn chơi.
+// Bước 3: Hệ thống sẽ kiểm tra xem có va chạm nào xảy ra dựa trên các vị trí tính toán được trong bước trước đó hay không:
 
 // hàm kiểm tra rắn đã ăn quả táo chưa
 function checkEat() {    
-    // 2.1 Nếu vị trí đầu của con rắn trùng với vị trí của quả táo thì xóa class thức ăn và tăng chiều dài rắn. Hệ thống chuyển đến bước 3
+    // 3.1 Nếu vị trí đầu của con rắn trùng với vị trí của quả táo thì xóa class thức ăn và tăng chiều dài rắn. Hệ thống chuyển đến bước 4
     if (snake[0][0] === x_food && snake[0][1] === y_food
         || $('.cell' + '-' + x_food + '-' + y_food).hasClass('bg-danger')) {
         $('.cell' + '-' + x_food + '-' + y_food).removeClass('apple');
@@ -546,13 +547,13 @@ function checkEat() {
     }
 }
 
-    // 2.2 Nếu đầu rắn trùng với vị trí của nấm, có nghĩa là rắn đã ăn phải nấm độc. Hệ thống chuyển đến bước 4.
-    // 2.3 Nếu đầu rắn có tên class trùng với tường, boom hoặc thân rắn hoặc boss thì game kết thúc. Hệ thống chuyển đến bước 5.
+    // 3.2 Nếu đầu rắn trùng với vị trí của nấm, có nghĩa là rắn đã ăn phải nấm độc. Hệ thống chuyển đến bước 5.
+    // 3.3 Nếu đầu rắn có tên class trùng với tường, boom hoặc thân rắn hoặc boss thì game kết thúc. Hệ thống chuyển đến bước 6.
 
 //*TÂN END
 
 //*TÂN BEGIN
-//Bước 3: Rắn ăn mồi
+//Bước 4: Rắn ăn mồi
 // hàm tăng chiều dài con rắn
 function grown() {
     // Lấy vị trí cuối trừ vị trí kề cuối dể biết rắn đang nằm ngang hay dọc
@@ -567,7 +568,7 @@ function grown() {
 //*TÂN BEGIN
 // Hàm kiểm tra dính độc
 function checkToxic() {
-    // Bước 4: Nếu đầu rắn trùng với vị trí nấm nghĩa là rắn đã ăn phải nấm độc.
+    // Bước 5: Nếu đầu rắn trùng với vị trí nấm nghĩa là rắn đã ăn phải nấm độc.
     if ($(".cell" + "-" + snake[0][0] + "-" + snake[0][1]).hasClass("mushroom")) {
         $(".cell" + "-" + snake[0][0] + "-" + snake[0][1]).removeClass('mushroom')
         isToxic = true
@@ -583,7 +584,7 @@ function checkToxic() {
 //*TÂN BEGIN
 // hàm kiểm tra điều kiện kết thúc game
 function gameOver() {
-    // Bước 5: Nếu đầu con rắn có tên class trùng tường hoặc boom hoặc thân hoặc boss thì game kết thúc
+    // Bước 6: Nếu đầu con rắn có tên class trùng tường hoặc boom hoặc thân hoặc boss thì game kết thúc
     if ($('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-success') // bg tường
         || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('boom') // bg boom
         || $('.cell' + '-' + snake[0][0] + '-' + snake[0][1]).hasClass('bg-dark')// bg thân rắn
